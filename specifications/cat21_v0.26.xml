@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<asterix>
+<!--
+  Part 12
+
+  ADS-B Reports
+
+  Edition: 0.26
+  Edition Date: May 2011
+
+-->
+  <category cat="21" version="0.26">
+    <dataitem id="I021/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identification</name>
+      <definition>Identification of the ADS-B station providing information.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+        The up-to-date list of SACs is published on the Eurocontrol Web Site (http://www.eurocontrol.int/asterix/public/standard_page/sac_list.html).
+      </desc>
+    </dataitem>
+    <dataitem id="I021/020" frn="22" format="fixed" length="1">
+      <name>Emitter Category</name>
+      <definition>Characteristics of the originating ADS-B unit.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>ECAT</name>
+        <desc>Emitter Category</desc>
+        <enum value="0">No ADS-B Emitter Category Information</enum>
+        <enum value="1">light aircraft &lt;= 7000 kg</enum>
+        <enum value="2">reserved</enum>
+        <enum value="3">7000 kg &lt; medium a/c &lt; 136000 kg</enum>
+        <enum value="4">reserved</enum>
+        <enum value="5">136000 kg &lt;= heavy aircraft</enum>
+        <enum value="6">highly manoeuvrable (5g acceleration capability) and high speed (&gt;400 knotscruise)</enum>
+        <enum value="7">reserved</enum>
+        <enum value="8">reserved</enum>
+        <enum value="9">reserved</enum>
+        <enum value="10">rotocraft</enum>
+        <enum value="11">glider / sailplane</enum>
+        <enum value="12">lighter-than-air</enum>
+        <enum value="13">unmanned aerial vehicle</enum>
+        <enum value="14">space / transatmospheric vehicle</enum>
+        <enum value="15">ultralight / handglider / paraglider</enum>
+        <enum value="16">parachutist / skydiver</enum>
+        <enum value="17">reserved</enum>
+        <enum value="18">reserved</enum>
+        <enum value="19">reserved</enum>
+        <enum value="20">surface emergency vehicle</enum>
+        <enum value="21">surface service vehicle</enum>
+        <enum value="22">fixed ground or tethered obstruction</enum>
+        <enum value="23">reserved</enum>
+        <enum value="24">reserved</enum>
+      </field>
+    </dataitem>
+     <dataitem id="I021/030" frn="3" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Time of applicability of reported position in form of elapsed time since last midnight, expressed as UTC.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <name>Time of Day</name>
+        <desc>LSB = 2^-7 s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The time of Day value is reset to zero at every midnight.<br/>
+    </desc>
+    </dataitem>
+     <dataitem id="I021/032" frn="20" format="fixed" length="1">
+      <name>Time of Day Accuracy</name>
+      <definition>The maximum difference between the actual time of applicability of the reported position and the time reported in the Time of Day item(I021/030).</definition>
+      <field octed="1" msb="8" lsb="1">
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/256</scale>
+        <name>Time of Day Accuracy</name>
+        <desc>LSB = 2^-8 s = 1/256 s</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The time of Day value is reset to zero at every midnight.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/040" frn="2" format="fixed" length="2">
+      <name>Target Report Descriptor</name>
+      <definition>Type and characteristics of the data as transmitted by a system.</definition>
+       <field octed="1" msb="16" lsb="16">
+        <name>DCR</name>
+        <definition>Differential Correction</definition>
+        <enum value="0">No differential correction (ADS-B)</enum>
+        <enum value="1">Differential correction (ADS-B)</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>GBS</name>
+        <definition>Ground Bit Setting</definition>
+        <enum value="0">Ground Bit not set</enum>
+        <enum value="1">Ground Bit set</enum>
+      </field>
+      <field octed="1" msb="14" lsb="14">
+        <name>SIM</name>
+        <definition>Simulated Target</definition>
+        <enum value="0">Actual target report</enum>
+        <enum value="1">Simulated target report</enum>
+      </field>
+      <field octed="1" msb="13" lsb="13">
+        <name>TST</name>
+        <definition>Test Target</definition>
+        <enum value="0">Default</enum>
+        <enum value="1">Test Target</enum>
+      </field>
+      <field octed="1" msb="12" lsb="12">
+        <name>RAB</name>
+        <definition>Report Type</definition>
+        <enum value="0">Report from target transponder</enum>
+        <enum value="1">Report from field monitor (fixed transponder)</enum>
+      </field>
+      <field octed="1" msb="11" lsb="11">
+        <name>SAA</name>
+        <definition>Selected Altitude Available</definition>
+        <enum value="0">Equipment not capable to provide Selected Altitude</enum>
+        <enum value="1">Equipment capable to provide Selected Altitude</enum>
+      </field>
+       <field octed="1" msb="10" lsb="10">
+        <name>SPI</name>
+        <definition>Special Position Indicator</definition>
+        <enum value="0">Absence of SPI</enum>
+        <enum value="1">Special Position Identification</enum>
+      </field>
+      <field octed="1" msb="9" lsb="9">
+        <name>Spare</name>
+        <definition>Spare field</definition>
+      </field>
+      <field octed="1" msb="8" lsb="6">
+        <name>ATP</name>
+        <definition>Address Type</definition>
+        <enum value="0">Non unique Address</enum>       
+        <enum value="1">24-Bit ICAO address</enum>
+        <enum value="2">Surface vehicle address</enum>
+        <enum value="3">Anonymous address</enum>
+        <enum value="4">Reserved for future use</enum>
+        <enum value="5">Reserved for future use</enum>
+        <enum value="6">Reserved for future use</enum>
+        <enum value="7">Reserved for future use</enum>
+      </field>
+      <field octed="1" msb="5" lsb="4">
+        <name>ARC</name>
+        <definition>Altitude Reporting Capability</definition>
+        <enum value="0">Unknown</enum>
+        <enum value="1">25 ft</enum>
+        <enum value="2">100 ft</enum>
+        <enum value="3">Invalid</enum>
+      </field>
+      <field octed="1" msb="3" lsb="1">
+        <name>Spare</name>
+        <definition>Spare bits</definition>    
+      </field>     
+    </dataitem>
+    <dataitem id="I021/070" frn="27" format="fixed" length="2">
+      <name>Mode-3/A Code in Octal Representation</name>
+      <definition>Mode-3/A code converted into octal representation.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>V</name>
+        <definition>Validation</definition>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>G</name>
+        <definition>Garbled</definition>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled Code</enum>
+      </field>
+      <field octed="1" msb="14" lsb="14">
+        <name>L</name>
+        <definition>Derived</definition>
+        <enum value="0">Code derived during last update</enum>
+        <enum value="1">Code not extracted during last update</enum>
+      </field>
+      <field octed="1" msb="13" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>Reply</name>
+        <format>octal</format>
+        <desc>Mode-3/A reply in octal representation</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I021/080" frn="5" format="fixed" length="3">
+      <name>Target Address</name>
+      <definition>Target address (emitter identifier) assigned uniquely to each target.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <name>Target Address</name>
+        <format>hex</format>
+        <desc>24-Bits, A23 to A0</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I021/090" frn="7" format="fixed" length="2">
+      <name>Figure of Merit</name>
+      <definition>ADS figure of merit (FOM) provided by the aircraft avionics</definition>
+      <field octed="1" msb="16" lsb="15">
+        <name>AC</name>
+        <enum value="00b">Unknown</enum>
+          <enum value="01b">ACAS not operational</enum>
+          <enum value="1bb">ACAS operational</enum>
+          <enum value="11b">invalid</enum>        
+      </field>
+     <field octed="1" msb="14" lsb="13">
+        <name>MN</name>
+        <enum value="00b">Unknown</enum>
+          <enum value="01b">Multiple navigational aids not operating</enum>
+          <enum value="1bb">Multiple navigational aids operating</enum>
+          <enum value="11b">invalid</enum>        
+      </field>
+      <field octed="1" msb="12" lsb="11">
+        <name>DC</name>
+        <enum value="00b">Unknown</enum>
+          <enum value="01b">Differential correction</enum>
+          <enum value="1bb">No Differential correction</enum>
+          <enum value="11b">invalid</enum>        
+      </field>
+      <field octed="1" msb="10" lsb="5">
+        <name>Spare</name>
+        <desc>Spare bits, set to “0”</desc>
+        <mandatory value="0"/>
+      </field>
+   <field octed="1" msb="4" lsb="1">
+        <name>PA</name>
+		<forma>uint</forma>     
+      </field>
+    </dataitem>
+    <dataitem id="I021/095" frn="19" format="fixed" length="1">
+      <name>Velocity Uncertainty Category</name>
+      <definition>AVelocity uncertainty category of the least accurate velocity component</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Velocity Uncertainty Category</name>
+        <format>uint</format>     
+      </field>   
+    </dataitem>
+    <dataitem id="I021/110" frn="26" format="compound" length="1">
+      <name>Trajectory Intent</name>
+      <definition>Reports indicating the 4D intended trajectory of the aircraft.</definition>
+      <subfield frn="1" format="fixed" length="1">
+        <name>COM Subfield</name>
+        <field octed="1" msb="8" lsb="8">
+          <name>NAV</name>
+          <enum value="0">Trajectory Intent Data is available for this aircraft</enum>
+          <enum value="1">Trajectory Intent Data is not available for this aircraft</enum>
+        </field>
+        <field octed="1" msb="7" lsb="7">
+          <name>NVB</name>
+          <enum value="0">Trajectory Intent Data is valid</enum>
+          <enum value="1">Trajectory Intent Data is not valid</enum>
+        </field>
+        <field octed="1" msb="6" lsb="2">
+          <name>Spare</name>
+          <desc>Spare bits, set to “0”</desc>
+          <mandatory value="0"/>
+        </field>
+      </subfield>
+      <subfield frn="2" format="repetitive" length="15">
+        <name>Trajectory Intent Data</name>
+        <field octed="1" msb="120" lsb="120">
+          <name>TCA</name>
+          <enum value="0">TCP number available</enum>
+          <enum value="1">TCP number not available</enum>
+        </field>
+        <field octed="1" msb="119" lsb="119">
+          <name>NC</name>
+          <enum value="0">TCP compliance</enum>
+          <enum value="1">TCP non-compliance</enum>
+        </field>
+        <field octed="1" msb="118" lsb="113">
+          <name>TCP Number</name>
+          <format>int</format>
+          <desc>Trajectory Change Point number</desc>
+        </field>
+        <field octed="1" msb="112" lsb="97">
+          <name>Altitude</name>
+          <format>int</format>
+          <desc>Altitude in two’s complement form, LSB= 10ft, -1500 ft &lt;= altitude &lt;= 150000 ft</desc>
+        </field>
+        <field octed="1" msb="96" lsb="73">
+          <name>Latitude</name>
+          <format>int</format>
+          <desc>In WGS.84 in two’s complement. -90 &lt;= latitude &lt;= 90 deg. LSB = 180/2^23 deg. = approx.2.145767*10^-5 deg.</desc>
+        </field>
+        <field octed="1" msb="72" lsb="49">
+          <name>Longitude</name>
+          <format>int</format>
+          <desc>In WGS.84 in two’s complement. -180 &lt;= longitude &lt; 180 LSB = 180/2^23 deg. = approx.2.145767*10^-05 deg.</desc>
+        </field>
+        <field octed="1" msb="48" lsb="45">
+          <name>Point Type</name>
+          <enum value="0">Unknown</enum>
+          <enum value="1">Fly by waypoint (LT)</enum>
+          <enum value="2">Fly over waypoint (LT)</enum>
+          <enum value="3">Hold pattern (LT)</enum>
+          <enum value="4">Procedure hold (LT)</enum>
+          <enum value="5">Procedure turn (LT)</enum>
+          <enum value="6">RF leg (LT)</enum>
+          <enum value="7">Top of climb (VT)</enum>
+          <enum value="8">Top of descent (VT)</enum>
+          <enum value="9">Start of level (VT)</enum>
+          <enum value="10">Cross-over altitude (VT)</enum>
+          <enum value="11">Transition altitude (VT)</enum>
+        </field>
+        <field octed="1" msb="44" lsb="43">
+          <name>TD</name>
+          <enum value="0">N/A</enum>
+          <enum value="1">Turn right</enum>
+          <enum value="2">Turn left</enum>
+          <enum value="3">No turn</enum>
+        </field>
+        <field octed="1" msb="42" lsb="42">
+          <name>TRA</name>
+          <desc>Turn Radius Availabilty</desc>
+          <enum value="0">TTR available</enum>
+          <enum value="1">TTR not available</enum>
+        </field>
+        <field octed="1" msb="41" lsb="41">
+          <name>TOA</name>
+          <enum value="0">TTR available</enum>
+          <enum value="1">TTR not available</enum>
+        </field>
+        <field octed="1" msb="40" lsb="17">
+          <name>TOV</name>
+          <format>uint</format>
+          <desc>Time Over Point, LSB = 1 second</desc>
+        </field>
+        <field octed="1" msb="16" lsb="1">
+          <name>TTR</name>
+          <format>uint</format>
+          <desc>TCP Turn radius, LSB = 0.01 Nm,0 &lt;= TTR &lt;= 655.35 Nm</desc>
+        </field>
+        <desc><b>NOTES</b><br/>
+      1. NC is set to one when the aircraft will not fly the path described by the TCP data.<br/>
+      2. TCP numbers start from zero.<br/>
+      3. LT = Lateral Type<br/>
+      4. VT = Vertical Type<br/>
+      5. TOV gives the estimated time before reaching the point. It is defined as the absolute time from midnight.<br/>
+      6. TOV is meaningful only if TOA is set to 1.<br/>
+      </desc>
+      </subfield>
+    </dataitem>
+    <dataitem id="I021/130" frn="4" format="fixed" length="8">
+      <name>Position in WGS-84 Co-ordinates</name>
+      <description>Position in WGS-84 Co-ordinates.</description>
+      <field octed="1" msb="64" lsb="33">
+        <name>Latitude</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>180/2^25</scale>
+        <desc>In WGS.84 in two’s complement. Range -90 &lt;= latitude &lt;= 90 deg. LSB = 180/2^23 degrees. = 2.145767 * 10^-05 degrees. This corresponds to a resolution of at least 2.4 meters</desc>
+      </field>
+      <field octed="1" msb="32" lsb="1">
+        <name>Longitude</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>180/2^25</scale>
+        <desc>In WGS.84 in two’s complement. Range -180 &lt;= longitude &lt; 180 deg. LSB = 180/2^23 degrees. = 2.145767 * 10^-05 degrees. This corresponds to a resolution of at least 2.4 meters.</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+     Positive longitude indicates East. Positive latitude indicates North.
+     </desc>
+    </dataitem>
+    <dataitem id="I021/131" frn="28" format="fixed" length="1">
+      <name>Signal Amplitude</name>
+      <description>Amplitude, in dBm, of ADS-B messages received by the ground station, coded in two’s complement.</description>
+      <field octed="1" msb="8" lsb="1">
+        <name>SAM</name>
+        <format>uint</format>
+        <desc>Signal Amplitude LSB = 1 dBm</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+     The value gives the amplitude of the latest received squitter.
+     </desc>
+    </dataitem>
+    <dataitem id="I021/140" frn="6" format="fixed" length="2">
+      <name>Geometric Altitude</name>
+      <description>Vertical distance between the target and the projection of its position on the earth’s ellipsoid, as defined by WGS84, in two’s complement form</description>
+      <field octed="1" msb="16" lsb="1">
+        <name>Altitude</name>
+        <format>int</format>
+        <scale>6.25</scale>
+         <unit>ft</unit>
+        <desc>-1500 ft &lt;= Geometric Height &lt;= 150000 ft. (LSB) = 6.25 ft</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+     1. LSB is required to be less than 10 ft by ICAO.<br/>
+     2. A value of ‘0111111111111111’ indicates that the aircraft transmits a “greater than” indication.<br/>
+     </desc>
+    </dataitem>
+    <dataitem id="I021/145" frn="10" format="fixed" length="2">
+      <name>Flight Level</name>
+      <description>Flight Level from barometric measurements, not QNH corrected, in two’s complement form.</description>
+      <field octed="1" msb="16" lsb="1">
+        <name>Flight Level</name>
+        <format>int</format>
+       <unit>FL</unit>
+        <scale>1/4</scale>
+        <desc>-15 FL &lt;= Flight Level &lt;= 1500 FL. (LSB) = 1/4 FL</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I021/146" frn="24" format="fixed" length="2">
+      <name>Intermediate State Selected Altitude</name>
+      <definition>The short-term vertical intent as described by either the FMS
+selected altitude, the Altitude Control Panel Selected Altitude, or
+the current aircraft altitude according to the aircraft's mode of
+flight.
+    </definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>SAS</name>
+        <desc>Source Availability</desc>
+        <enum value="0">No source information provided</enum>
+        <enum value="1">Source information provided</enum>
+      </field>
+      <field octed="1" msb="15" lsb="14">
+        <name>Source</name>
+        <enum value="0">Unknown</enum>
+        <enum value="1">Aircraft Altitude</enum>
+        <enum value="2">FCU/MSP Selected Altitude</enum>
+        <enum value="3">FMS Selected Altitude</enum>
+      </field>
+      <field octed="1" msb="13" lsb="1">
+        <name>Altitude</name>
+        <format>int</format>
+        <unit>ft</unit>
+        <scale>25</scale>
+        <desc>Altitude in two’s complement form LSB=25ft -1300ft &lt;= Altitude &lt;= 100000ft</desc>
+      </field>
+      <desc><b>NOTE</b><br/>The Selected Altitude provided in this field is not necessarily the “Target Altitude” as defined by ICAO.<br/>
+    <b>NOTE</b><br/>The value of “Source” (bits 15/14) indicating “unknown” or “Aircraft
+                          Altitude” is kept for backward compatibility as these indications are
+                          not provided by “version 2” systems as defined by data item I021/210, bits 6/4.<br/>
+    <b>NOTE</b><br/>Vertical mode indications supporting the determination of the nature of the Selected Altitude are provided in the Reserved Expansion Field in the subfield NAV.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/148" frn="25" format="fixed" length="2">
+      <name>Final State Selected Altitude</name>
+      <definition>The vertical intent value that corresponds with the ATC cleared altitude, as derived from the Altitude Control Panel (MCP/FCU).</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>MV</name>
+        <desc>Manage Vertical Mode</desc>
+        <enum value="0">Not active or unknown</enum>
+        <enum value="1">Active</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>Altitude Hold Mode</name>
+        <enum value="0">Not active or unknown</enum>
+        <enum value="1">Active</enum>
+      </field>
+      <field octed="1" msb="14" lsb="14">
+        <name>Approach Mode</name>
+        <enum value="0">Not active or unknown</enum>
+        <enum value="1">Active</enum>
+      </field>
+      <field octed="1" msb="13" lsb="1">
+        <name>Altitude</name>
+        <format>int</format>
+        <unit>ft</unit>
+        <scale>25</scale>
+        <desc>Altitude in in two’s complement form LSB=25ft -1300ft &lt;= Altitude &lt;= 100000ft</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    This item is kept for backward compatibility but shall not be used for
+    “version 2” ADS-B systems (as defined by data item I021/210, bits 6/4)
+    for which item 146 will be used to forward the MCP/FCU or the FMS
+    selected altitude information. For “version 2” ADS-B systems, the
+    vertical mode indications will be provided through the Reserved
+    Expansion Field in the subfield NAV.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/150" frn="11" format="fixed" length="2">
+      <name>Airspeed</name>
+      <definition>Calculated Airspeed (Element of Air Vector).</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>IM</name>
+        <enum value="0">Airspeed = IAS</enum>
+        <enum value="1">Airspeed = Mach</enum>
+      </field>
+      <field octed="1" msb="15" lsb="1">
+        <name>Airspeed</name>
+         <unit>nmi/s</unit>
+        <scale>2^-14</scale>
+        <format>uint</format>
+        <desc>if IAS, LSB = 2-14 NM/s,if Mach, LSB = 0.001</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I021/151" frn="12" format="fixed" length="2">
+      <name>True Airspeed</name>
+      <definition>True Airspeed</definition>
+      <field octed="1" msb="16" lsb="1">
+       <name>True Airspeed</name>
+        <format>uint</format>
+        <unit>kn</unit>
+        <scale>1</scale>
+        <desc>(LSB) = 1 knot</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The RE-Bit, if set, indicates that the value to be transmitted is beyond
+    the range defined for this specific data item and the applied
+    technology. In this case the True Airspeed contains the maximum
+    value that can be downloaded from the aircraft avionics and the RE-
+    bit indicates that the actual value is greater than the value contained in the field.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/152" frn="13" format="fixed" length="2">
+      <name>Magnetic Heading</name>
+      <definition>Magnetic Heading (Element of Air Vector).</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Magnetic Heading</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale>
+        <desc>(LSB) = 360° / 2^16 (approx. 0.0055°)</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    True North Heading is defined in the Reserved Expansion Field in the subfield TNH.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/155" frn="14" format="fixed" length="2">
+      <name>Barometric Vertical Rate</name>
+      <definition>Barometric Vertical Rate, in two’s complement form.</definition>      
+      <field octed="1" msb="16" lsb="1">
+        <name>Barometric Vertical Rate</name>
+        <format>int</format>
+        <unit>ft/min</unit>
+        <scale>6.25</scale>
+        <desc>(LSB) = 6.25 feet/minute</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The RE-Bit, if set, indicates that the value to be transmitted is beyond
+    the range defined for this specific data item and the applied
+    technology. In this case the Barometric Vertical Rate contains the
+    maximum value that can be downloaded from the aircraft avionics
+    and the RE-bit indicates that the actual value is greater than the value contained in the field.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/157" frn="15" format="fixed" length="2">
+      <name>Geometric Vertical Rate</name>
+      <definition>Geometric Vertical Rate, in two’s complement form, with reference to WGS-84.</definition>   
+      <field octed="1" msb="16" lsb="1">
+        <name>Geometric Vertical Rate</name>
+        <format>int</format>
+        <unit>ft/min</unit>
+        <scale>6.25</scale>        
+        <desc>(LSB) = 6.25 feet/minute</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The RE-Bit, if set, indicates that the value to be transmitted is beyond
+    the range defined for this specific data item and the applied
+    technology. In this case the Geometric Vertical Rate contains the
+    maximum value that can be downloaded from the aircraft avionics
+    and the RE-bit indicates that the actual value is greater than the value contained in the field.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/160" frn="16" format="fixed" length="4">
+      <name>Ground Vector</name>
+      <definition>Ground Speed and Track Angle elements of Airborne Ground Vector.</definition>
+      <field octed="1" msb="32" lsb="17">
+        <name>Ground Speed</name>
+        <format>int</format>
+        <unit>nmi/s</unit>
+        <scale>2^-14</scale>
+        <desc>Ground Speed referenced to WGS-84. (LSB) = 2-14 NM/s ≅ 0.22 kt. 0 ≤ Ground Speed &lt; 2 NM/s</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>Track Angle</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale>
+        <desc>Track Angle clockwise reference to “True North”. (LSB) = 360° / 2^16 (approx. 0.0055°)</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The RE-Bit, if set, indicates that the value to be transmitted is beyond
+    the range defined for this specific data item and the applied
+    technology. In this case the Ground Speed contains the maximum
+    value that can be downloaded from the aircraft avionics and the RE-
+    bit indicates that the actual value is greater than the value contained in the field.<br/>
+    <b>NOTE</b><br/>
+    The Surface Ground Vector format is defined in the Reserved Expansion Field in the subfield SGV.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I021/165" frn="17" format="variable" length="1">
+      <name>Rate of Turn</name>
+      <definition>Rate of Turn, in two’s complement form.</definition>
+      <field octed="1" msb="8" lsb="7">
+        <name>Turn Indicator</name>
+        <enum value="0">Not available</enum>
+        <enum value="1">Left</enum>
+        <enum value="2">Right</enum>
+        <enum value="3">Straight</enum>      
+      </field>
+      <field octed="1" msb="6" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="2" msb="8" lsb="2">
+        <name>Rate of Turn</name>
+        <format>int</format>
+        <scale>1/4</scale>
+        <unit>deg</unit>
+      </field>
+    </dataitem>
+    <dataitem id="I021/170" frn="18" format="fixed" length="6">
+      <name>Target Identification</name>
+      <definition>Target (aircraft or vehicle) identification in 8 characters, as reported by the target.</definition>
+      <field octed="1" msb="48" lsb="1">
+        <format>icao6str</format>
+        <name>Target Identification</name>
+        <desc>Characters 1-8 (coded on 6 bits each) defining target identification when flight plan is available or the registration marking when no flight plan is available.</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I021/200" frn="21" format="fixed" length="1">
+      <name>Target Status</name>
+      <definition>Status of the target</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Target Status</name>
+        <desc>Priority Status</desc>
+        <enum value="0">No emergency / not reported</enum>
+        <enum value="1">General emergency</enum>
+        <enum value="2">Lifeguard / medical emergency</enum>
+        <enum value="3">Minimum fuel</enum>
+        <enum value="4">No communications</enum>
+        <enum value="5">Unlawful interference</enum>
+        <enum value="6">reserved</enum>
+        <enum value="7">reserved</enum>      
+      </field>
+    </dataitem>
+    <dataitem id="I021/210" frn="8" format="fixed" length="1">
+      <name>Link Technology Indicator</name>
+      <definition>Indication of which ADS link technology has been used to send the target report.</definition>
+      <field octed="1" msb="8" lsb="6">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>DTI</name>
+        <desc>Cockpit Display of Traffic Information</desc>
+        <enum value="0">Unknown</enum>
+        <enum value="1">Aircraft equiped with CDTI</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>MDS</name>
+        <desc>Mode-S Extended Squitter</desc>
+        <enum value="0">Not used</enum>
+        <enum value="1">Used</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>UAT</name>
+        <desc>UAT</desc>
+         <enum value="0">Not used</enum>
+        <enum value="1">Used</enum>
+      </field>
+       <field octed="1" msb="2" lsb="2">
+        <name>VDL</name>
+        <desc>VDL Mode 4</desc>
+         <enum value="0">Not used</enum>
+        <enum value="1">Used</enum>
+      </field>
+       <field octed="1" msb="1" lsb="1">
+        <name>OTR</name>
+        <desc>Other Technology</desc>
+         <enum value="0">Not used</enum>
+        <enum value="1">Used</enum>
+      </field>    
+    </dataitem>
+    <dataitem id="I021/220" frn="23" format="compound" length="1">
+      <name>Met Information</name>
+      <definition>Compound data item consisting of a one byte primary sub-field, followed by up to four fixed length data fields.</definition>
+      <subfield frn="1" format="fixed" length="2">
+        <name>Wind Speed</name>
+        <field octed="1" msb="16" lsb="1">
+          <name>Wind Speed</name>
+          <format>uint</format>
+          <desc>(LSB) = 1 knot 0 &lt;= Wind Speed &lt;= 300</desc>
+        </field>
+      </subfield>
+      <subfield frn="2" format="fixed" length="2">
+        <name>Wind Direction</name>
+        <field octed="1" msb="16" lsb="1">
+          <name>Wind Direction</name>
+          <format>uint</format>
+          <desc>(LSB) = 1 degree 1 &lt;= Wind Direction &lt;= 360</desc>
+        </field>
+      </subfield>
+      <subfield frn="3" format="fixed" length="2">
+        <name>Temperature</name>
+        <field octed="1" msb="16" lsb="1">
+          <name>Temperature</name>
+          <format>int</format>
+          <desc>Temperature in degrees celsius, in two’s complement form (LSB) = 0.25 °C -100 ° &lt;= Temperature &lt;= 100 °C</desc>
+        </field>
+      </subfield>
+      <subfield frn="4" format="fixed" length="1">
+        <name>Turbulence</name>
+        <field octed="1" msb="8" lsb="1">
+          <name>Turbulence</name>
+          <format>uint</format>
+          <desc>Turbulence Integer between 0 and 15 inclusive</desc>
+        </field>
+      </subfield>
+    </dataitem>
+    <dataitem id="I021/230" frn="9" format="fixed" length="2">
+      <name>Roll Angle</name>
+      <description>The roll angle, in two’s complement form, of an aircraft executing a turn.</description>
+      <field octed="1" msb="16" lsb="1">
+        <name>Roll Angle</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>0.01</scale>
+        <desc>(LSB) = 0.01 degree -180 &lt;= Roll Angle &lt;= 180</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    Negative Value indicates “Left Wing Down”.<br/>
+    <b>NOTE</b><br/>
+    Resolution provided by the technology “1090 MHz Extended Squitter” is 1 degree.<br/>
+    </desc>
+    </dataitem> 
+    <dataitem id="I021/RE" frn="34" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>
+    <dataitem id="I021/SP" frn="35" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+  </category>
+</asterix>

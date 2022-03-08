@@ -1,0 +1,18 @@
+# Category {{.Cat}} Asterix Block {{.ReceivedAt}}
+Length: {{.Length}}
+
+## Raw data
+`{{.Data | ToHex}}`
+## Records ({{len .Records}})
+
+{{range $i, $records := .Records}}
+ ### Record {{$i}}
+ #### Length: {{.Length}}
+ #### Items
+ {{range $itemid, $item := .Items}}
+ ##### {{$itemid}}
+ {{range $fieldid, $field := $item.Fields }}
+  {{$fieldid}}: {{$field.Value}}
+  {{end}}
+ {{end}}
+{{end}}
